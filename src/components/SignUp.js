@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import axios from 'axios';
 import {useState} from 'react';
-import {Link, useHistory} from 'react-router-dom';
+import {useHistory} from 'react-router-dom';
 
 import validateEmail from './validate/validateEmail';
 
@@ -29,7 +29,7 @@ export default function SignUp() {
             });
             request.catch((error)=> {
                 if(error.response.status === 403) {
-                    alert('This e-mail is already in use, please proceed to log in page or use a different e-mail address');
+                    alert('Este email já está cadastrado. Por favor, tente efetuar o login ou use um email diferente.');
                 } else if(error.response.status === 400) {
                     alert('Um dos campos está em branco!');
                 } else {
@@ -39,20 +39,24 @@ export default function SignUp() {
             })
         }
         if (!validateEmail(email)){
-            alert("Please, provide your e-mail");
+            alert("Por favor, digite um email apropriado.");
             return;
         }
         if (!password){
-            alert("Please, enter a password");
+            alert("Por favor, escolha uma senha.");
             return;
         }
         if (!username){
-            alert("Please, tell us your username");
+            alert("Por favor, informe seu nome.");
             return;
         }
         if (password !== password2){
             alert("As senhas inseridas são diferentes entre si!");
         }
+    }
+
+    function goTo(path) {
+        history.push(path);
     }
 
     return(
@@ -65,7 +69,7 @@ export default function SignUp() {
                     <input onChange={(e)=>setPassword(e.target.value)} value={password} type="password" placeholder="Senha"></input>
                     <input onChange={(e)=>setPassword2(e.target.value)} value={password2} type="password" placeholder="Confirme sua senha"></input>
                     <Button isloading={isLoading} disabled={isLoading} type="submit">Cadastrar</Button>
-                    <Link to='/'><p>Já tem uma conta? Entre agora!</p></Link>
+                    <p onClick={()=> goTo('/')}>Já tem uma conta? Entre agora!</p>
                 </Form>
             </LogInBox>
         </Body>
@@ -134,6 +138,7 @@ const Form = styled.form`
         line-height: 18px;
         letter-spacing: 0em;
         color: #FFFFFF;
+        cursor: pointer;
     }
 `
 

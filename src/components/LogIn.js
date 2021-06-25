@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import axios from 'axios';
 import {useState, useContext, useEffect} from 'react';
-import {Link, useHistory} from 'react-router-dom';
+import {useHistory} from 'react-router-dom';
 
 import UserContext from './contexts/UserContext';
 import validateEmail from './validate/validateEmail';
@@ -29,11 +29,13 @@ export default function LogIn() {
                 setIsLoading(false);
                 localStorage.setItem('user',JSON.stringify({
                     user: response.data.user,
+                    userId: response.data.userId,
                     token: response.data.token, 
                     config: {headers: {Authorization: `Bearer ${response.data.token}`}} 
                     }));
                 setUser({
                     user: response.data.user,
+                    userId: response.data.userId,
                     token: response.data.token, 
                     config: {headers: {Authorization: `Bearer ${response.data.token}`}} 
                     })
@@ -50,6 +52,10 @@ export default function LogIn() {
         }
     }
 
+    function goTo(path) {
+        history.push(path);
+    }
+
     return(
         <Body>
             <LogInBox>
@@ -58,7 +64,7 @@ export default function LogIn() {
                     <input onChange={(e)=>setEmail(e.target.value)} value={email} type="text" placeholder="E-mail" ></input>
                     <input onChange={(e)=>setPassword(e.target.value)} value={password} type="password" placeholder="Senha"></input>
                     <Button isloading={isLoading} disabled={isLoading} type="submit">Entrar</Button>
-                    <Link to='/signup'><p>Primeira vez? Cadastre-se!</p></Link>
+                    <p onClick={()=> goTo('/signup')}>Primeira vez? Cadastre-se!</p>
                 </Form>
             </LogInBox>
         </Body>
@@ -127,6 +133,7 @@ const Form = styled.form`
         line-height: 18px;
         letter-spacing: 0em;
         color: #FFFFFF;
+        cursor: pointer;
     }
 `
 
